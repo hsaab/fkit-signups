@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.get("/", function(req, res) {
-  pool.query(`SELECT ()`)
+  pool.query(`SELECT * FROM signups`)
     .then((result) => {
       res.json(result.rows);
     })
@@ -15,6 +15,18 @@ app.get("/", function(req, res) {
       res.status(400).json({error: err});
     })
 });
+
+app.get("/add", function(req, res) {
+  pool.query(`INSERT INTO signups (first, email)
+    VALUES ($1, $2) RETURNING *`, [req.query.first, req.query.email])
+    .then((result) => {
+      res.json(result.rows);
+    })
+    .catch((err) => {
+      console.log(req.query)
+      res.status(400).json({error: err});
+    })
+})
 
 var port = process.env.PORT || 3000;
 app.listen(port);
