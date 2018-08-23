@@ -8,7 +8,8 @@ if (!process.env.DATABASE_URL) {
 // Establish a connection to Postgres here using pg.Pool
 var pg = require('pg');
 var pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
+  ssl: true
 })
 
 if (!pool) {
